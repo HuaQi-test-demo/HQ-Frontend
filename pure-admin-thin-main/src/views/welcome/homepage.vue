@@ -13,7 +13,56 @@
             <button class="close-button" @click="closeExchangeRate">×</button>
           </div>
           <p>汇率数据展示...</p>
-          <p>{{ reponse.data. }}</p>
+          <table id="exchangeRatesTable">
+            <thead>
+              <tr>
+                <th>货币</th>
+                <th>货币符号</th>
+                <th>货币1名称</th>
+                <th>货币1汇率</th>
+                <th>货币2名称</th>
+                <th>货币2汇率</th>
+                <th>货币3名称</th>
+                <th>货币3汇率</th>
+                <th>货币4名称</th>
+                <th>货币4汇率</th>
+                <th>货币5名称</th>
+                <th>货币5汇率</th>
+                <th>货币6名称</th>
+                <th>货币6汇率</th>
+                <th>货币7名称</th>
+                <th>货币7汇率</th>
+                <th>货币8名称</th>
+                <th>货币8汇率</th>
+                <th>货币9名称</th>
+                <th>货币9汇率</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-if="new_data">
+                <td>{{ new_data.currency }}</td>
+                <td>{{ new_data.currency_sign }}</td>
+                <td>{{ new_data.currency1_name }}</td>
+                <td>{{ new_data.currency_rate1 }}</td>
+                <td>{{ new_data.currency2_name }}</td>
+                <td>{{ new_data.currency_rate2 }}</td>
+                <td>{{ new_data.currency3_name }}</td>
+                <td>{{ new_data.currency_rate3 }}</td>
+                <td>{{ new_data.currency4_name }}</td>
+                <td>{{ new_data.currency_rate4 }}</td>
+                <td>{{ new_data.currency5_name }}</td>
+                <td>{{ new_data.currency_rate5 }}</td>
+                <td>{{ new_data.currency6_name }}</td>
+                <td>{{ new_data.currency_rate6 }}</td>
+                <td>{{ new_data.currency7_name }}</td>
+                <td>{{ new_data.currency_rate7 }}</td>
+                <td>{{ new_data.currency8_name }}</td>
+                <td>{{ new_data.currency_rate8 }}</td>
+                <td>{{ new_data.currency9_name }}</td>
+                <td>{{ new_data.currency_rate9 }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -55,8 +104,8 @@ watch(showExchangeRate, () => {
     }
   });
 });
-
 // 发送数据到后端
+const new_data = ref<any>(null);
 const sendToBackend = async (datas: {
   country?: string;
   date?: string;
@@ -64,11 +113,13 @@ const sendToBackend = async (datas: {
 }) => {
   try {
     const response = await axios.post("http://127.0.0.1:8000/submit/", datas);
+    new_data.value = response.data.table_data;
+    console.log(new_data);
   } catch (error) {
     console.error("Error sending data to backend:", error);
   }
 };
-
+console.log(new_data);
 onMounted(async () => {
   await nextTick();
 
@@ -237,4 +288,6 @@ const closeExchangeRate = () => {
   outline: none;
 }
 .close-button:hover {
-  background-color: rgb(1
+  background-color: rgb(194, 191, 191);
+}
+</style>
