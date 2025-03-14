@@ -37,24 +37,6 @@ const ruleForm = reactive({
   password: "admin123"
 });
 
-const gotoRegister = () => {
-  useUserStoreHook()
-    .loginByUsername({ username: ruleForm.username, password: "admin123" })
-    .then(res => {
-      if (res.success) {
-        // 获取后端路由
-        return initRouter().then(() => {
-          router.push("/register").then(() => {
-            message("注册页面", { type: "success" });
-          });
-        });
-      } else {
-        message("跳转失败", { type: "error" });
-      }
-    })
-    .finally(() => (loading.value = false));
-};
-
 const onLogin = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate(async (valid, fields) => {
@@ -205,14 +187,6 @@ onBeforeUnmount(() => {
               </el-button>
             </Motion>
           </el-form>
-          <el-button
-            class="w-full mt-4"
-            size="default"
-            type="primary"
-            @click="gotoRegister"
-          >
-            注册
-          </el-button>
         </div>
       </div>
     </div>
