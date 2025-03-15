@@ -17,7 +17,7 @@
               <tr>
                 <th rowspan="2">货币</th>
                 <th rowspan="2">货币符号</th>
-                <th colspan="2">货币信息</th>
+                <th colspan="2">主流货币信息</th>
               </tr>
               <tr>
                 <th>货币名称</th>
@@ -234,7 +234,6 @@ const closeExchangeRate = () => {
   background: rgba(238, 225, 212, 0.5);
   display: flex;
   justify-content: center;
-  
 }
 .exchange-rate-details {
   width: 100%;

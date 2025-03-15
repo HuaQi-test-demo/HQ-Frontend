@@ -12,13 +12,13 @@ export default [
     }
   },
   {
-    path: "/register", 
+    path: "/register",
     name: "Register",
-    component: () => import("@/views/rigister/register.vue"), 
+    component: () => import("@/views/rigister/register.vue"),
     meta: {
       title: "注册",
       showLink: false,
-      rank: 102 
+      rank: 102
     }
   },
   {
@@ -37,5 +37,4 @@ export default [
       }
     ]
   }
-  
 ] satisfies Array<RouteConfigsTable>;
