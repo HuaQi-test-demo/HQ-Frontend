@@ -1,11 +1,10 @@
+<!-- eslint-disable vue/no-parsing-error -->
+<!-- eslint-disable prettier/prettier -->
 <template>
   <div class="container">
     <div ref="chartRef" class="chart" :style="chartStyle" />
     <div class="select" :style="selectStyle">
-      <CollapsibleCalendar
-        class="calendar"
-        @dateSelected="handleDateSelected"
-      />
+      <CollapsibleCalendar class="calendar" @dateSelected="handleDateSelected" />
       <div v-if="showExchangeRate" class="exchange-rate-container">
         <div class="exchange-rate-details">
           <div class="header">
@@ -24,22 +23,23 @@
                 <th>货币汇率</th>
               </tr>
             </thead>
-            <tbody>
-              <tr v-if="new_data">
-                <td rowspan="10" style="vertical-align: middle">
+            <tbody v-if="new_data">
+              <tr>
+                <td rowspan="9" style="vertical-align: middle">
                   {{ new_data.currency }}
                 </td>
-                <td rowspan="10" style="vertical-align: middle">
+                <td rowspan="9" style="vertical-align: middle">
                   {{ new_data.currency_sign }}
                 </td>
-                <template v-for="index in 9" :key="index">
-                  <tr>
-                    <td>{{ new_data[`currency${index}_name`] }}</td>
-                    <td>{{ new_data[`currency_rate${index}`] }}</td>
-                  </tr>
-                </template>
+                <td>{{ new_data[`currency1_name`]  }}</td>
+                <td>{{ new_data[`currency_rate1`]  }}</td>
+              </tr>
+              <tr v-for="index in 8" :key="index">
+                <td>{{ new_data[`currency${index + 1}_name`] || "---"}}</td>
+                <td>{{ new_data[`currency_rate${index + 1}`] || "---"}}</td>
               </tr>
             </tbody>
+
           </table>
         </div>
       </div>
@@ -90,7 +90,7 @@ const sendToBackend = async (datas: {
   countries?: string[];
 }) => {
   try {
-    const response = await axios.post("http://127.0.0.1:8000/submit/", datas);
+    const response = await axios.post("http://121.36.9.36:5959/submit/", datas);
     new_data.value = response.data.table_data;
     console.log(new_data);
   } catch (error) {
@@ -216,16 +216,20 @@ const closeExchangeRate = () => {
 .container {
   display: flex;
 }
+
 .select {
   border-left: black 1px solid;
 }
+
 .chart {
   height: 100vh;
 }
+
 .calendar {
   width: 10%;
   padding: 10px;
 }
+
 .exchange-rate-container {
   top: 0;
   left: 0;
@@ -235,6 +239,7 @@ const closeExchangeRate = () => {
   display: flex;
   justify-content: center;
 }
+
 .exchange-rate-details {
   width: 100%;
   height: 100%;
@@ -242,16 +247,22 @@ const closeExchangeRate = () => {
   border-radius: 8px;
   text-align: center;
 }
+
 .header {
   display: flex;
-  justify-content: center; /* 标题居中 */
+  justify-content: center;
+  /* 标题居中 */
   align-items: center;
-  position: relative; /* 为按钮定位提供参考 */
+  position: relative;
+  /* 为按钮定位提供参考 */
   margin-bottom: 16px;
 }
+
 .close-button {
-  position: absolute; /* 绝对定位 */
-  right: 0; /* 放置在最右侧 */
+  position: absolute;
+  /* 绝对定位 */
+  right: 0;
+  /* 放置在最右侧 */
   width: 28px;
   height: 28px;
   cursor: pointer;
@@ -265,24 +276,29 @@ const closeExchangeRate = () => {
   border: none;
   outline: none;
 }
+
 .close-button:hover {
   background-color: rgb(194, 191, 191);
 }
+
 #exchangeRatesTable {
   width: 100%;
   border-collapse: collapse;
   margin-top: 16px;
 }
+
 #exchangeRatesTable th,
 #exchangeRatesTable td {
   padding: 12px;
   border: 1px solid #ddd;
   text-align: center;
 }
+
 #exchangeRatesTable th {
   background-color: #f5f5f5;
   font-weight: bold;
 }
+
 #exchangeRatesTable tr:hover {
   background-color: #f9f9f9;
 }
