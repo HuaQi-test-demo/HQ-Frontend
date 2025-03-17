@@ -1,0 +1,4 @@
+/pure-admin-thin-main/node_modules/
+/pure-admin-thin-main/.vite/
+/pure-admin-thin-main/dist/
+*.local
