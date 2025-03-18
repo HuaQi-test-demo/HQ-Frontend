@@ -33,7 +33,7 @@
           placeholder="请输入最大回撤比例"
           class="drawdown-input"
         >
-        <template #append>%</template>
+          <template #append>%</template>
         </el-input>
         <el-select
           v-model="selectedPeriod"
@@ -82,9 +82,8 @@ const chartData2 = ref<ChartData>({ time: [], values: [] });
 // 国家映射
 const countryMapping = ref<Record<string, string>>(countryNameZhMapping);
 
-const maxDrawdown = ref<number>(2);  // 最大回撤比例，默认为2%
+const maxDrawdown = ref<number>(2); // 最大回撤比例，默认为2%
 const selectedPeriod = ref<number>(1); // 交易期限，默认为1年
-
 
 // 初始化逻辑
 onMounted(() => {
@@ -96,7 +95,7 @@ onMounted(() => {
     selectedCountries.value = countries;
     console.log("来自地图跳转的初始化参数:", {
       countries,
-      dateRange: dateRange.value,
+      dateRange: dateRange.value
     });
     fetchChartData(); // 立即请求数据
   }
