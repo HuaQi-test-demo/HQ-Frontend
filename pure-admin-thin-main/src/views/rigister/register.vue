@@ -57,8 +57,8 @@
           <div class="option">
             <input
               id="enterprise"
-              type="radio"
               v-model="category"
+              type="radio"
               name="category"
               value="enterprise"
             />
@@ -67,8 +67,8 @@
           <div class="option">
             <input
               id="personal"
-              type="radio"
               v-model="category"
+              type="radio"
               name="category"
               value="personal"
             />
@@ -77,8 +77,8 @@
           <div class="option">
             <input
               id="bank"
-              type="radio"
               v-model="category"
+              type="radio"
               name="category"
               value="bank"
             />

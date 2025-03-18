@@ -25,6 +25,28 @@
         </el-button>
       </div>
     </div>
+    <div class="Customization_container">
+      <div class="customization-controls">
+        <el-input
+          v-model.number="maxDrawdown"
+          type="number"
+          placeholder="请输入最大回撤比例"
+          class="drawdown-input"
+        >
+          <template #append>%</template>
+        </el-input>
+        <el-select
+          v-model="selectedPeriod"
+          placeholder="选择交易期限"
+          class="period-select"
+        >
+          <el-option label="1年" :value="1" />
+          <el-option label="3年" :value="3" />
+          <el-option label="5年" :value="5" />
+        </el-select>
+      </div>
+      >>>>>>> 11448c0e88adc8c0c4eb617b2b37f3d5bd3e09a3
+    </div>
     <div class="chart_container">
       <RiskChart class="chart1" :chartData="chartData1" />
       <RiskChart class="chart2" :chartData="chartData2" />
@@ -61,6 +83,9 @@ const chartData2 = ref<ChartData>({ time: [], values: [] });
 // 国家映射
 const countryMapping = ref<Record<string, string>>(countryNameZhMapping);
 
+const maxDrawdown = ref<number>(2); // 最大回撤比例，默认为2%
+const selectedPeriod = ref<number>(1); // 交易期限，默认为1年
+
 // 初始化逻辑
 onMounted(() => {
   const query = router.currentRoute.value.query;
@@ -96,22 +121,36 @@ const fetchChartData = async () => {
     ElMessage.warning("请选择两个国家");
     return;
   }
+  if (maxDrawdown.value === null || maxDrawdown.value <= 0) {
+    ElMessage.warning("请输入有效的最大回撤比例");
+    return;
+  }
+
+  if (selectedPeriod.value === null) {
+    ElMessage.warning("请选择交易期限");
+    return;
+  }
 
   try {
     console.log("发送请求参数:", {
       countries: selectedCountries.value,
       startDate: dateRange.value[0].toISOString().split("T")[0], // 转换为 YYYY-MM-DD 格式
-      endDate: dateRange.value[1].toISOString().split("T")[0] // 转换为 YYYY-MM-DD 格式
+
+      endDate: dateRange.value[1].toISOString().split("T")[0],
+      maxDrawdown: maxDrawdown.value,
+      investmentPeriod: selectedPeriod.value
     });
 
-    // 需替换实际API
     const response = await axios.post("/api/currency-pair", {
       countries: selectedCountries.value,
       startDate: dateRange.value[0].toISOString().split("T")[0],
-      endDate: dateRange.value[1].toISOString().split("T")[0]
+
+      endDate: dateRange.value[1].toISOString().split("T")[0],
+      maxDrawdown: maxDrawdown.value,
+      investmentPeriod: selectedPeriod.value
     });
 
-    // 处理响应数据（假设返回结构）
+    // 处理响应数据
     chartData1.value = {
       time: response.data.country1.dates,
       values: response.data.country1.rates
@@ -149,6 +188,35 @@ watch([selectedCountries, dateRange], () => {
 .select_country {
   width: 100%;
   padding: 20px;
+}
+.Customization_container {
+  margin-top: 5px;
+  padding: 10px;
+  margin-left: 60px;
+}
+
+.customization-controls {
+  display: flex;
+  gap: 20px;
+  padding: 0 20px;
+  align-items: center;
+}
+
+.drawdown-input {
+  flex: 1;
+  margin-right: 130px;
+  /* max-width: 200px; */
+}
+
+.drawdown-input :deep(.el-input-group__append) {
+  padding: 0 12px;
+  background-color: var(--el-fill-color-light);
+}
+
+.period-select {
+  flex: 1;
+  margin-right: 150px;
+  /* max-width: 200px; */
 }
 .chart_container {
   margin-top: 150px;
