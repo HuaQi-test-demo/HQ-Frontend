@@ -1,8 +1,11 @@
 <template>
   <div>
     <div class="country-selection">
-       <div class="select_container">
-      <CollapsibleCalendar @dateRangeSelected="handleDateRangeChange" class="select_calendar"/>
+      <div class="select_container">
+        <CollapsibleCalendar
+          class="select_calendar"
+          @dateRangeSelected="handleDateRangeChange"
+        />
         <el-select
           v-model="selectedCountries"
           multiple
@@ -17,11 +20,11 @@
             class="select_country"
           />
         </el-select>
-      <el-button class="button" @click="updateCountries">
-        更新国家
-      </el-button>
+        <el-button class="button" @click="updateCountries">
+          更新国家
+        </el-button>
+      </div>
     </div>
-  </div>
     <div class="chart_container">
       <RiskChart class="chart1" :chartData="chartData1" />
       <RiskChart class="chart2" :chartData="chartData2" />
@@ -48,7 +51,10 @@ const router = useRouter();
 
 // 响应式数据
 const selectedCountries = ref<string[]>([]);
-const dateRange = ref<[Date, Date]>([new Date("2024-12-01"), new Date("2024-12-07")]); // 默认日期范围
+const dateRange = ref<[Date, Date]>([
+  new Date("2024-12-01"),
+  new Date("2024-12-07")
+]); // 默认日期范围
 const chartData1 = ref<ChartData>({ time: [], values: [] });
 const chartData2 = ref<ChartData>({ time: [], values: [] });
 
@@ -65,7 +71,7 @@ onMounted(() => {
     selectedCountries.value = countries;
     console.log("来自地图跳转的初始化参数:", {
       countries,
-      dateRange: dateRange.value,
+      dateRange: dateRange.value
     });
     fetchChartData(); // 立即请求数据
   }
@@ -94,25 +100,25 @@ const fetchChartData = async () => {
   try {
     console.log("发送请求参数:", {
       countries: selectedCountries.value,
-      startDate: dateRange.value[0].toISOString().split('T')[0], // 转换为 YYYY-MM-DD 格式
-      endDate: dateRange.value[1].toISOString().split('T')[0], // 转换为 YYYY-MM-DD 格式
+      startDate: dateRange.value[0].toISOString().split("T")[0], // 转换为 YYYY-MM-DD 格式
+      endDate: dateRange.value[1].toISOString().split("T")[0] // 转换为 YYYY-MM-DD 格式
     });
 
     // 需替换实际API
     const response = await axios.post("/api/currency-pair", {
       countries: selectedCountries.value,
-      startDate: dateRange.value[0].toISOString().split('T')[0],
-      endDate: dateRange.value[1].toISOString().split('T')[0],
+      startDate: dateRange.value[0].toISOString().split("T")[0],
+      endDate: dateRange.value[1].toISOString().split("T")[0]
     });
 
     // 处理响应数据（假设返回结构）
     chartData1.value = {
       time: response.data.country1.dates,
-      values: response.data.country1.rates,
+      values: response.data.country1.rates
     };
     chartData2.value = {
       time: response.data.country2.dates,
-      values: response.data.country2.rates,
+      values: response.data.country2.rates
     };
   } catch (error) {
     console.error("请求失败:", error);

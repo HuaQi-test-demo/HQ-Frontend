@@ -90,7 +90,7 @@ const sendToBackend = async (datas: {
   countries?: string[];
 }) => {
   try {
-    const response = await axios.post("http://127.0.0.1:8000/submit/", datas);
+    const response = await axios.post("http://121.36.9.36:5959/submit/", datas);
     new_data.value = response.data.table_data;
     console.log(new_data);
   } catch (error) {

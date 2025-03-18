@@ -136,7 +136,10 @@ const handleRegister = async () => {
 
   try {
     // 发送 POST 请求到后端
-    const response = await axios.post("http://127.0.0.1:8000/register/", data);
+    const response = await axios.post(
+      "http://121.36.9.36:5959/register/",
+      data
+    );
     if (response.data.status == "ok") {
       console.log("注册成功:", response.data);
 
