@@ -4,7 +4,7 @@ export default {
   meta: {
     icon: "ri:information-line",
     // showLink: false,
-    title: "异常页面",
+    title: "货币对",
     rank: 9
   },
   children: [
@@ -13,7 +13,7 @@ export default {
       name: "403",
       component: () => import("@/views/error/403.vue"),
       meta: {
-        title: "403"
+        title: "多货币对"
       }
     },
     {
@@ -21,7 +21,7 @@ export default {
       name: "404",
       component: () => import("@/views/error/404.vue"),
       meta: {
-        title: "404"
+        title: "单货币对"
       }
     }
   ]

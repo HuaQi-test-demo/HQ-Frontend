@@ -1,51 +1,48 @@
 <template>
   <div>
-    <div class="country-selection">
-      <div class="select_container">
-        <CollapsibleCalendar
-          class="select_calendar"
-          @dateRangeSelected="handleDateRangeChange"
-        />
-        <el-select
-          v-model="selectedCountries"
-          multiple
-          placeholder="请选择国家"
-          class="select_country"
-        >
-          <el-option
-            v-for="(countryZh, countryEn) in countryMapping"
-            :key="countryEn"
-            :label="countryZh"
-            :value="countryEn"
-            class="select_country"
+    <div style="display: flex; width: 100%; align-items: center;">
+      <div class="selection">
+        <div class="up">
+          <CollapsibleCalendar
+            class="select_calendar"
+            @dateRangeSelected="handleDateRangeChange"
           />
-        </el-select>
-        <el-button class="button" @click="updateCountries">
-          更新国家
-        </el-button>
+          <el-select
+            v-model="selectedCountries"
+            multiple
+            placeholder="请选择国家"
+            class="select_country"
+          >
+            <el-option
+              v-for="(countryZh, countryEn) in countryMapping"
+              :key="countryEn"
+              :label="countryZh"
+              :value="countryEn"
+              class="select_country"
+            />
+          </el-select>
+        </div>
+        <div class="down">
+          <el-input
+            v-model.number="maxDrawdown"
+            type="number"
+            placeholder="请输入最大回撤比例"
+            class="drawdown-input"
+          >
+            <template #append>%</template>
+          </el-input>
+          <el-select
+            v-model="selectedPeriod"
+            placeholder="选择交易期限"
+            class="period-select"
+          >
+            <el-option label="1年" :value="1" />
+            <el-option label="3年" :value="3" />
+            <el-option label="5年" :value="5" />
+          </el-select>
+        </div>
       </div>
-    </div>
-    <div class="Customization_container">
-      <div class="customization-controls">
-        <el-input
-          v-model.number="maxDrawdown"
-          type="number"
-          placeholder="请输入最大回撤比例"
-          class="drawdown-input"
-        >
-          <template #append>%</template>
-        </el-input>
-        <el-select
-          v-model="selectedPeriod"
-          placeholder="选择交易期限"
-          class="period-select"
-        >
-          <el-option label="1年" :value="1" />
-          <el-option label="3年" :value="3" />
-          <el-option label="5年" :value="5" />
-        </el-select>
-      </div>
-      >>>>>>> 11448c0e88adc8c0c4eb617b2b37f3d5bd3e09a3
+      <el-button class="button" @click="updateCountries"> 更新国家 </el-button>
     </div>
     <div class="chart_container">
       <RiskChart class="chart1" :chartData="chartData1" />
@@ -174,38 +171,36 @@ watch([selectedCountries, dateRange], () => {
 </script>
 
 <style scoped>
-.country-selection {
-  padding: 10px;
-  text-align: center;
-}
-.select_container {
-  display: flex;
+.max {
   width: 100%;
+  display: flex;
+  align-items: center;
 }
+.selection {
+  width: 100%;
+  display: block;
+}
+
+.up {
+  display: flex;
+}
+
+.down {
+  display: flex;
+}
+
 .select_calendar {
+  padding: 10px;
   width: 100%;
 }
 .select_country {
-  width: 100%;
-  padding: 20px;
-}
-.Customization_container {
-  margin-top: 5px;
   padding: 10px;
-  margin-left: 60px;
-}
-
-.customization-controls {
-  display: flex;
-  gap: 20px;
-  padding: 0 20px;
-  align-items: center;
+  width: 100%;
 }
 
 .drawdown-input {
-  flex: 1;
-  margin-right: 130px;
-  /* max-width: 200px; */
+  padding: 10px;
+  width: 100%; /* max-width: 200px; */
 }
 
 .drawdown-input :deep(.el-input-group__append) {
@@ -214,16 +209,16 @@ watch([selectedCountries, dateRange], () => {
 }
 
 .period-select {
-  flex: 1;
-  margin-right: 150px;
-  /* max-width: 200px; */
+  padding: 10px;
+  width: 100%;
 }
 .chart_container {
-  margin-top: 150px;
+  margin-top: 50px;
   display: flex;
 }
 .button {
-  margin: 20px;
+  margin-left: 20px;
+  align-items: center;
   width: 10%;
 }
 .chart1 {

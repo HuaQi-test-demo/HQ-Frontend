@@ -36,7 +36,6 @@ watch(dateRange, newRange => {
 
 <style scoped>
 .calendar-container {
-  padding: 20px;
   width: 100%;
 }
 </style>
