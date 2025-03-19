@@ -1,144 +1,193 @@
+<script setup lang="ts">
+import Motion from "./utils/motion";
+import { useRouter } from "vue-router";
+import { message } from "@/utils/message";
+import { loginRules } from "./utils/rule";
+import { useNav } from "@/layout/hooks/useNav";
+import type { FormInstance } from "element-plus";
+import { useLayout } from "@/layout/hooks/useLayout";
+import { useUserStoreHook } from "@/store/modules/user";
+import { initRouter, getTopMenu } from "@/router/utils";
+import { bg, avatar, illustration } from "./utils/static";
+import { useRenderIcon } from "@/components/ReIcon/src/hooks";
+import { ref, reactive, toRaw, onMounted, onBeforeUnmount } from "vue";
+import { useDataThemeChange } from "@/layout/hooks/useDataThemeChange";
+
+import dayIcon from "@/assets/svg/day.svg?component";
+import darkIcon from "@/assets/svg/dark.svg?component";
+import Lock from "@iconify-icons/ri/lock-fill";
+import User from "@iconify-icons/ri/user-3-fill";
+import axios from "axios";
+defineOptions({
+  name: "Login"
+});
+const router = useRouter();
+const loading = ref(false);
+const ruleFormRef = ref<FormInstance>();
+
+const { initStorage } = useLayout();
+initStorage();
+
+const { dataTheme, overallStyle, dataThemeChange } = useDataThemeChange();
+dataThemeChange(overallStyle.value);
+const { title } = useNav();
+
+const ruleForm = reactive({
+  username: "admin",
+  password: "admin123"
+});
+const gotoRegister = () => {
+  useUserStoreHook()
+    .loginByUsername({ username: ruleForm.username, password: "admin123" })
+    .then(res => {
+      if (res.success) {
+        // 获取后端路由
+        return initRouter().then(() => {
+          router.push("/register").then(() => {
+            message("注册页面", { type: "success" });
+          });
+        });
+      } else {
+        message("跳转失败", { type: "error" });
+      }
+    })
+    .finally(() => (loading.value = false));
+};
+const onLogin = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  await formEl.validate((valid, fields) => {
+    if (valid) {
+      loading.value = true;
+      useUserStoreHook()
+        .loginByUsername({ username: ruleForm.username, password: "admin123" })
+        .then(res => {
+          if (res.success) {
+            // 获取后端路由
+            return initRouter().then(() => {
+              router.push(getTopMenu(true).path).then(() => {
+                message("登录成功", { type: "success" });
+              });
+            });
+          } else {
+            message("登录失败", { type: "error" });
+          }
+        })
+        .finally(() => (loading.value = false));
+    }
+  });
+};
+
+/** 使用公共函数，避免`removeEventListener`失效 */
+function onkeypress({ code }: KeyboardEvent) {
+  if (["Enter", "NumpadEnter"].includes(code)) {
+    onLogin(ruleFormRef.value);
+  }
+}
+
+onMounted(() => {
+  window.document.addEventListener("keypress", onkeypress);
+});
+
+onBeforeUnmount(() => {
+  window.document.removeEventListener("keypress", onkeypress);
+});
+</script>
+
 <template>
-  <div>
-    <div ref="chartRef" class="chart"></div>
-    <CollapsibleCalendar @dateSelected="handleDateSelected" />
-    <div v-if="showExchangeRate" class="exchange-rate-container">
-      <div class="exchange-rate-details">
-        <h2>{{ selectedCountry }} - {{ selectedDate }} 汇率详情</h2>
-        <p>汇率数据展示...</p>
-        <button @click="closeExchangeRate">关闭</button>
+  <div class="select-none">
+    <img :src="bg" class="wave" />
+    <div class="flex-c absolute right-5 top-3">
+      <!-- 主题 -->
+      <el-switch
+        v-model="dataTheme"
+        inline-prompt
+        :active-icon="dayIcon"
+        :inactive-icon="darkIcon"
+        @change="dataThemeChange"
+      />
+    </div>
+    <div class="login-container">
+      <div class="img">
+        <component :is="toRaw(illustration)" />
+      </div>
+      <div class="login-box">
+        <div class="login-form">
+          <avatar class="avatar" />
+          <Motion>
+            <h2 class="outline-none">{{ title }}</h2>
+          </Motion>
+
+          <el-form
+            ref="ruleFormRef"
+            :model="ruleForm"
+            :rules="loginRules"
+            size="large"
+          >
+            <Motion :delay="100">
+              <el-form-item
+                :rules="[
+                  {
+                    required: true,
+                    message: '请输入账号',
+                    trigger: 'blur'
+                  }
+                ]"
+                prop="username"
+              >
+                <el-input
+                  v-model="ruleForm.username"
+                  clearable
+                  placeholder="账号"
+                  :prefix-icon="useRenderIcon(User)"
+                />
+              </el-form-item>
+            </Motion>
+
+            <Motion :delay="150">
+              <el-form-item prop="password">
+                <el-input
+                  v-model="ruleForm.password"
+                  clearable
+                  show-password
+                  placeholder="密码"
+                  :prefix-icon="useRenderIcon(Lock)"
+                />
+              </el-form-item>
+            </Motion>
+
+            <Motion :delay="250">
+              <el-button
+                class="w-full mt-4"
+                size="default"
+                type="primary"
+                :loading="loading"
+                @click="onLogin(ruleFormRef)"
+              >
+                登录
+              </el-button>
+            </Motion>
+          </el-form>
+          <el-button
+            class="w-full mt-4"
+            size="default"
+            type="primary"
+            @click="gotoRegister"
+          >
+            注册
+          </el-button>
+        </div>
       </div>
     </div>
+    <div></div>
   </div>
 </template>
 
-<script lang="ts" setup>
-import { ref, onMounted, nextTick } from "vue";
-import * as echarts from "echarts";
-import geo from "@/json/geo";
-import mapping from "@/json/mapping";
-import CollapsibleCalendar from "@/components/Calendar/CollapsibleCalendar_single.vue";
-import { useRouter } from "vue-router";
-
-const router = useRouter();
-const chartRef = ref<HTMLDivElement | null>(null);
-const selectedCountries = ref<string[]>([]);
-const selectedDate = ref<string>("");
-const selectedCountry = ref<string>("");
-const showExchangeRate = ref<boolean>(false);
-
-onMounted(async () => {
-  await nextTick();
-
-  if (!chartRef.value) {
-    console.error("❌ chartRef 未绑定到 DOM！");
-    return;
-  }
-
-  const myChart = echarts.init(chartRef.value);
-  if (!myChart) {
-    console.error("❌ ECharts 初始化失败！");
-    return;
-  }
-
-  echarts.registerMap("WorldCountry", geo.WorldCountryGeo);
-
-  const options: echarts.EChartsOption = {
-    tooltip: { trigger: "item" },
-    toolbox: {
-      show: true,
-      orient: "vertical",
-      left: "right",
-      top: "center",
-      feature: {
-        dataView: { readOnly: false },
-        restore: {},
-        saveAsImage: {}
-      }
-    },
-    visualMap: {
-      min: 0,
-      max: 1,
-      show: false,
-      inRange: { color: ["#d1e5f0", "#f46d43"] }
-    },
-    series: [
-      {
-        name: "世界地图",
-        type: "map",
-        map: "WorldCountry",
-        label: { show: false },
-        emphasis: {
-          label: { show: true, fontSize: "14" },
-          itemStyle: { areaColor: "#f46d43" }
-        },
-        nameMap: mapping.CountryNameZhMapping
-      }
-    ]
-  };
-
-  myChart.setOption(options);
-
-  myChart.on("click", (params: any) => {
-    if (!params.name) return;
-
-    const country = params.name;
-    if (selectedCountries.value.length < 2) {
-      selectedCountries.value.push(country);
-      selectedCountry.value = country;
-    }
-
-    if (selectedCountries.value.length === 2) {
-      console.log("选中的两个国家:", selectedCountries.value);
-      router.push({ path: "/404", query: { countries: selectedCountries.value.join(",") } });
-    } else if (selectedDate.value) {
-      console.log("选中的国家和日期:", selectedCountry.value, selectedDate.value);
-      showExchangeRate.value = true;
-    }
-  });
-
-  window.addEventListener("resize", () => myChart.resize());
-});
-
-const handleDateSelected = (date: string) => {
-  selectedDate.value = date;
-  if (selectedCountry.value) {
-    console.log("选中的国家和日期:", selectedCountry.value, selectedDate.value);
-    showExchangeRate.value = true;
-  }
-};
-
-const closeExchangeRate = () => {
-  showExchangeRate.value = false;
-  selectedCountries.value = [];
-  selectedDate.value = "";
-  selectedCountry.value = "";
-};
-</script>
-
 <style scoped>
-.chart {
-  width: 100%;
-  height: 500px;
-}
+@import url("@/style/login.css");
+</style>
 
-.exchange-rate-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+<style lang="scss" scoped>
+:deep(.el-input-group__append, .el-input-group__prepend) {
+  padding: 0;
 }
-
-.exchange-rate-details {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  text-align: center;
-}
-
 </style>

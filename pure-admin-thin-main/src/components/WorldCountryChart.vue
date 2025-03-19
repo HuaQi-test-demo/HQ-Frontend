@@ -1,5 +1,5 @@
 <template>
-  <div ref="chartRef" class="chart"></div>
+  <div ref="chartRef" class="chart" />
 </template>
 
 <script lang="ts" setup>
