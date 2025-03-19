@@ -48,9 +48,12 @@ const onLogin = async (formEl: FormInstance | undefined) => {
       });
       if (response.data.success) {
         useUserStoreHook().loginByUsername({
-          username: response.data.data_user.user.name,
-          password: response.data.data_user.user.user_password
+          username: ruleForm.username,
+          password: ruleForm.password
+          // username: response.data.data_user.user.name,
+          // password: response.data.data_user.user.user_password
         });
+        console.log(response);
         useUserStoreHook()
           .loginByUsername({
             username: ruleForm.username,
