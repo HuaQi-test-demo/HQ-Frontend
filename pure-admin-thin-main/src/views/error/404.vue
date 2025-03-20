@@ -42,31 +42,7 @@
           </el-select>
         </div>
       </div>
-<<<<<<< HEAD
-    </div>
-    <div class="Customization_container">
-      <div class="customization-controls">
-        <el-input
-          v-model.number="maxDrawdown"
-          type="number"
-          placeholder="请输入最大回撤比例"
-          class="drawdown-input"
-        >
-          <template #append>%</template>
-        </el-input>
-        <el-select
-          v-model="selectedPeriod"
-          placeholder="选择交易期限"
-          class="period-select"
-        >
-          <el-option label="1年" :value="1" />
-          <el-option label="3年" :value="3" />
-          <el-option label="5年" :value="5" />
-        </el-select>
-      </div>
-=======
       <el-button class="button" @click="updateCountries"> 更新国家 </el-button>
->>>>>>> 20b59dcdddb4fd6a20ee61a93e08fb40c4cb2201
     </div>
     <div class="chart_container">
       <RiskChart class="chart1" :chartData="chartData1" />
