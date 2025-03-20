@@ -155,9 +155,9 @@ const updateCharts = (result1: any, result2: any) => {
         layout: "force",
         roam: true,
         force: {
-          repulsion: 200,
+          repulsion: 1,
           gravity: 0.02,
-          edgeLength: [50, 200]
+          edgeLength: [50, 2000]
         },
         boundingRect: [-500, -500, 1000, 1000],
         data: data.nodes.map((node: any) => ({
