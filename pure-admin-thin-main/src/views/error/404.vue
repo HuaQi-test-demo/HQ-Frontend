@@ -45,7 +45,6 @@
           <el-option label="5年" :value="5" />
         </el-select>
       </div>
-      >>>>>>> 11448c0e88adc8c0c4eb617b2b37f3d5bd3e09a3
     </div>
     <div class="chart_container">
       <RiskChart class="chart1" :chartData="chartData1" />
@@ -134,18 +133,17 @@ const fetchChartData = async () => {
   try {
     console.log("发送请求参数:", {
       countries: selectedCountries.value,
-      startDate: dateRange.value[0].toISOString().split("T")[0], // 转换为 YYYY-MM-DD 格式
+      startDate: dateRange.value[0],//.toISOString().split("T")[0], // 转换为 YYYY-MM-DD 格式
 
-      endDate: dateRange.value[1].toISOString().split("T")[0],
+      endDate: dateRange.value[1],//.toISOString().split("T")[0],
       maxDrawdown: maxDrawdown.value,
       investmentPeriod: selectedPeriod.value
     });
 
-    const response = await axios.post("/api/currency-pair", {
+    const response = await axios.post("http://127.0.0.1:8000/currency_pair", {
       countries: selectedCountries.value,
-      startDate: dateRange.value[0].toISOString().split("T")[0],
-
-      endDate: dateRange.value[1].toISOString().split("T")[0],
+      startDate: dateRange.value[0],//.toISOString().split("T")[0],
+      endDate: dateRange.value[1],//.toISOString().split("T")[0],
       maxDrawdown: maxDrawdown.value,
       investmentPeriod: selectedPeriod.value
     });
