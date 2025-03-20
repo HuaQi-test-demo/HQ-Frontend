@@ -138,7 +138,7 @@ const fetchChartData = async () => {
       investmentPeriod: selectedPeriod.value
     });
 
-    const response = await axios.post("http://127.0.0.1:8000/currency_pair", {
+    const response = await axios.post("http://121.36.9.36:5959/currency_pair", {
       countries: selectedCountries.value,
       startDate: dateRange.value[0],//.toISOString().split("T")[0],
       endDate: dateRange.value[1],//.toISOString().split("T")[0],
