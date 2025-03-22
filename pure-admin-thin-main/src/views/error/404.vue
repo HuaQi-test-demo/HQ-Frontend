@@ -1,6 +1,7 @@
 <template>
+  <meta http-equiv="Access-Control-Allow-Origin" content="*" />
   <div>
-    <div style="display: flex; width: 100%; align-items: center;">
+    <div style="display: flex; width: 100%; align-items: center">
       <div class="selection">
         <div class="up">
           <CollapsibleCalendar
@@ -131,17 +132,17 @@ const fetchChartData = async () => {
   try {
     console.log("发送请求参数:", {
       countries: selectedCountries.value,
-      startDate: dateRange.value[0],//.toISOString().split("T")[0], // 转换为 YYYY-MM-DD 格式
+      startDate: dateRange.value[0], //.toISOString().split("T")[0], // 转换为 YYYY-MM-DD 格式
 
-      endDate: dateRange.value[1],//.toISOString().split("T")[0],
+      endDate: dateRange.value[1], //.toISOString().split("T")[0],
       maxDrawdown: maxDrawdown.value,
       investmentPeriod: selectedPeriod.value
     });
 
-    const response = await axios.post("http://121.36.9.36:5959/currency_pair", {
+    const response = await axios.post("http://127.0.0.1:8000/currency_pair", {
       countries: selectedCountries.value,
-      startDate: dateRange.value[0],//.toISOString().split("T")[0],
-      endDate: dateRange.value[1],//.toISOString().split("T")[0],
+      startDate: dateRange.value[0], //.toISOString().split("T")[0],
+      endDate: dateRange.value[1], //.toISOString().split("T")[0],
       maxDrawdown: maxDrawdown.value,
       investmentPeriod: selectedPeriod.value
     });
