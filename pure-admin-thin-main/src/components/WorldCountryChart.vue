@@ -15,20 +15,20 @@ const selectedCountries = ref<string[]>([]);
 
 // **确保 geo 数据可用**
 if (!geo.WorldCountryGeo) {
-  console.error("❌ geo.WorldCountryGeo 为空！");
+  console.error("geo.WorldCountryGeo 为空！");
 }
 
 onMounted(async () => {
   await nextTick();
 
   if (!chartRef.value) {
-    console.error("❌ chartRef 未绑定到 DOM！");
+    console.error("hartRef 未绑定到 DOM！");
     return;
   }
 
   const myChart = echarts.init(chartRef.value);
   if (!myChart) {
-    console.error("❌ ECharts 初始化失败！");
+    console.error("ECharts 初始化失败！");
     return;
   }
 
@@ -52,7 +52,7 @@ onMounted(async () => {
       min: 0,
       max: 1,
       show: false,
-      inRange: { color: ["#d1e5f0", "#f46d43"] }
+      inRange: { color: ["rgb(078,101,155)", "rgb(183, 118, 108)"] }
     },
     series: [
       {
@@ -62,7 +62,7 @@ onMounted(async () => {
         label: { show: false },
         emphasis: {
           label: { show: true, fontSize: "14" },
-          itemStyle: { areaColor: "#f46d43" }
+          itemStyle: { areaColor: "rgb(183, 118, 108)" }
         },
         nameMap: mapping.CountryNameZhMapping
       }
