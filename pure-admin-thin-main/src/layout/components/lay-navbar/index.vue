@@ -5,7 +5,6 @@ import LayNavMix from "../lay-sidebar/NavMix.vue";
 import LaySidebarFullScreen from "../lay-sidebar/components/SidebarFullScreen.vue";
 import LaySidebarBreadCrumb from "../lay-sidebar/components/SidebarBreadCrumb.vue";
 import LaySidebarTopCollapse from "../lay-sidebar/components/SidebarTopCollapse.vue";
-import Avatar from "@/assets/user.jpg";
 import LogoutCircleRLine from "@iconify-icons/ri/logout-circle-r-line";
 import Setting from "@iconify-icons/ri/settings-3-line";
 
@@ -76,7 +75,7 @@ const {
 <style lang="scss" scoped>
 .navbar {
   width: 100%;
-  height: 48px;
+  height: 52px;
   overflow: hidden;
 
   .hamburger-container {

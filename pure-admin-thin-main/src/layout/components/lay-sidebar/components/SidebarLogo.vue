@@ -52,7 +52,9 @@ const { title, getLogo } = useNav();
 
     img {
       display: inline-block;
-      height: 32px;
+      height: 45px;
+      margin-right: 3px;
+      padding-left:15px;
     }
 
     .sidebar-title {

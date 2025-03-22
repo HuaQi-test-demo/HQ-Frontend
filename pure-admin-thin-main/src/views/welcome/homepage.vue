@@ -4,7 +4,10 @@
   <div class="container">
     <div ref="chartRef" class="chart" :style="chartStyle" />
     <div class="select" :style="selectStyle">
-      <CollapsibleCalendar class="calendar" @dateSelected="handleDateSelected" />
+      <CollapsibleCalendar
+        class="calendar"
+        @dateSelected="handleDateSelected"
+      />
       <div v-if="showExchangeRate" class="exchange-rate-container">
         <div class="exchange-rate-details">
           <div class="header">
@@ -31,15 +34,14 @@
                 <td rowspan="9" style="vertical-align: middle">
                   {{ new_data.currency_sign }}
                 </td>
-                <td>{{ new_data[`currency1_name`]  }}</td>
-                <td>{{ new_data[`currency_rate1`]  }}</td>
+                <td>{{ new_data[`currency1_name`] }}</td>
+                <td>{{ new_data[`currency_rate1`] }}</td>
               </tr>
               <tr v-for="index in 8" :key="index">
-                <td>{{ new_data[`currency${index + 1}_name`] || "---"}}</td>
-                <td>{{ new_data[`currency_rate${index + 1}`] || "---"}}</td>
+                <td>{{ new_data[`currency${index + 1}_name`] || "---" }}</td>
+                <td>{{ new_data[`currency_rate${index + 1}`] || "---" }}</td>
               </tr>
             </tbody>
-
           </table>
         </div>
       </div>
@@ -131,7 +133,7 @@ onMounted(async () => {
       min: 0,
       max: 1,
       show: false,
-      inRange: { color: ["#d1e5f0", "#f46d43"] }
+      inRange: { color: ["rgb(078,101,155)", "rgb(183, 118, 108)"] }
     },
     series: [
       {
@@ -139,9 +141,18 @@ onMounted(async () => {
         type: "map",
         map: "WorldCountry",
         label: { show: false },
+        itemStyle: {
+          areaColor: "rgb(078,101,155)",
+          borderColor: "rgba(253, 207, 158, 0.6)",
+          borderWidth: 0.3
+        },
         emphasis: {
           label: { show: true, fontSize: "14" },
-          itemStyle: { areaColor: "#f46d43" }
+          itemStyle: {
+            areaColor: "rgb(183, 118, 108)",
+            borderColor: "rgba(253, 207, 158, 0.8)",
+            borderWidth: 0.8
+          }
         },
         nameMap: mapping.CountryNameZhMapping
       }
@@ -219,6 +230,7 @@ const closeExchangeRate = () => {
 
 .select {
   border-left: black 1px solid;
+  background: #f2eee6;
 }
 
 .chart {
@@ -235,7 +247,6 @@ const closeExchangeRate = () => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(238, 225, 212, 0.5);
   display: flex;
   justify-content: center;
 }
@@ -290,7 +301,7 @@ const closeExchangeRate = () => {
 #exchangeRatesTable th,
 #exchangeRatesTable td {
   padding: 12px;
-  border: 1px solid #ddd;
+  border: 1px solid #ded3d3;
   text-align: center;
 }
 

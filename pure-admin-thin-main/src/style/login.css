@@ -43,6 +43,11 @@
   height: 80px;
 }
 
+.logo {
+  width:150px;
+  height: 150px;
+}
+
 .login-form h2 {
   text-transform: uppercase;
   margin: 15px 0;
@@ -71,10 +76,6 @@
     width: 360px;
   }
 
-  .avatar {
-    width: 280px;
-    height: 80px;
-  }
 }
 
 @media screen and (max-width: 968px) {

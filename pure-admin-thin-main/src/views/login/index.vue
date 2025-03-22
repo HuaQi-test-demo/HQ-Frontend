@@ -8,7 +8,7 @@ import type { FormInstance } from "element-plus";
 import { useLayout } from "@/layout/hooks/useLayout";
 import { useUserStoreHook } from "@/store/modules/user";
 import { initRouter, getTopMenu } from "@/router/utils";
-import { bg, avatar, illustration } from "./utils/static";
+import { bg,logo, avatar, illustration } from "./utils/static";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import { ref, reactive, toRaw, onMounted, onBeforeUnmount } from "vue";
 import { useDataThemeChange } from "@/layout/hooks/useDataThemeChange";
@@ -93,27 +93,6 @@ const onLogin = async (formEl: FormInstance | undefined) => {
       } else {
         message("登录失败", { type: "error" });
       }
-      // useUserStoreHook()
-      //   .loginByUsername({
-      //     username: ruleForm.username,
-      //     password: "admin123"
-      //     // username: response.data.data_user.user.name,
-      //     // password: response.data.data_user.user.user_password
-      //   })
-      //   .then(res => {
-      //     console.log(res);
-      //     if (res.success) {
-      //       // 获取后端路由
-      //       return initRouter().then(() => {
-      //         router.push(getTopMenu(true).path).then(() => {
-      //           message("登录成功", { type: "success" });
-      //         });
-      //       });
-      //     } else {
-      //       message("登录失败", { type: "error" });
-      //     }
-      //   })
-      //   .finally(() => (loading.value = false));
     }
   });
 };
@@ -153,7 +132,8 @@ onBeforeUnmount(() => {
       </div>
       <div class="login-box">
         <div class="login-form">
-          <avatar class="avatar" />
+          <!-- <avatar class="avatar" /> -->
+          <img :src="logo" alt="Logo" class="logo"/>
           <Motion>
             <h2 class="outline-none">{{ title }}</h2>
           </Motion>
