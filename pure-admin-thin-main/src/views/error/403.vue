@@ -88,8 +88,8 @@ const initChart = (chartRef: HTMLDivElement | null) => {
 
 onMounted(() => {
   nextTick(() => {
-    initChart(chartRefLeft.value); // 🔥 初始化左侧图表
-    initChart(chartRefRight.value); // 🔥 初始化右侧图表
+    initChart(chartRefLeft.value); 
+    initChart(chartRefRight.value);
     nextTick(fetchChartData);
   });
 });
@@ -258,7 +258,7 @@ const updateCharts = (result1: any, result2: any) => {
 /* 左侧 */
 .left,
 .right {
-  flex: 1; /* 📌 左右平分 50% */
+  flex: 1; 
   display: flex;
   flex-direction: column;
   align-items: center;

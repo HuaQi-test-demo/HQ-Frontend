@@ -138,23 +138,28 @@ const fetchChartData = async () => {
       maxDrawdown: maxDrawdown.value,
       investmentPeriod: selectedPeriod.value
     });
+<<<<<<< HEAD
 
     const response = await axios.post("http://127.0.0.1:8000/currency_pair", {
+=======
+//http://121.36.9.36:5959/
+    const response = await axios.post("http://127.0.0.1:8000/currency_pair/", {
+>>>>>>> f5c044c20c17764cfdfb1cc68852fccd197c8284
       countries: selectedCountries.value,
       startDate: dateRange.value[0], //.toISOString().split("T")[0],
       endDate: dateRange.value[1], //.toISOString().split("T")[0],
       maxDrawdown: maxDrawdown.value,
       investmentPeriod: selectedPeriod.value
     });
-
+    console.log(response)
     // 处理响应数据
     chartData1.value = {
-      time: response.data.country1.dates,
-      values: response.data.country1.rates
+      time: response.data.date_time,
+      values: response.data.predict_rate
     };
     chartData2.value = {
-      time: response.data.country2.dates,
-      values: response.data.country2.rates
+      time: response.data.date_time,
+      values: response.data.true_rate
     };
   } catch (error) {
     console.error("请求失败:", error);
