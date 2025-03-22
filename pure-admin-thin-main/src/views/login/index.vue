@@ -59,8 +59,8 @@ const onLogin = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate(async (valid, fields) => {
     if (valid) {
-      loading.value = true;
-      const response = await axios.post("http://121.36.9.36:5959/login/", {
+      loading.value = true;//http://121.36.9.36:5959
+      const response = await axios.post("http://127.0.0.1:8000/login/", {
         username: ruleForm.username,
         password: ruleForm.password
       });
