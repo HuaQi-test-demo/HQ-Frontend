@@ -88,7 +88,7 @@ const initChart = (chartRef: HTMLDivElement | null) => {
 
 onMounted(() => {
   nextTick(() => {
-    initChart(chartRefLeft.value); 
+    initChart(chartRefLeft.value);
     initChart(chartRefRight.value);
     nextTick(fetchChartData);
   });
@@ -258,7 +258,7 @@ const updateCharts = (result1: any, result2: any) => {
 /* 左侧 */
 .left,
 .right {
-  flex: 1; 
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;

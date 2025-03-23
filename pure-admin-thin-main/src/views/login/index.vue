@@ -8,7 +8,7 @@ import type { FormInstance } from "element-plus";
 import { useLayout } from "@/layout/hooks/useLayout";
 import { useUserStoreHook } from "@/store/modules/user";
 import { initRouter, getTopMenu } from "@/router/utils";
-import { bg,logo, avatar, illustration } from "./utils/static";
+import { bg, logo, avatar, illustration } from "./utils/static";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import { ref, reactive, toRaw, onMounted, onBeforeUnmount } from "vue";
 import { useDataThemeChange } from "@/layout/hooks/useDataThemeChange";
@@ -59,8 +59,8 @@ const onLogin = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate(async (valid, fields) => {
     if (valid) {
-      loading.value = true;//http://121.36.9.36:5959
-      const response = await axios.post("http://127.0.0.1:8000/login/", {
+      loading.value = true; //http://121.36.9.36:5959
+      const response = await axios.post("http://121.36.9.36:5959/login/", {
         username: ruleForm.username,
         password: ruleForm.password
       });
@@ -133,7 +133,7 @@ onBeforeUnmount(() => {
       <div class="login-box">
         <div class="login-form">
           <!-- <avatar class="avatar" /> -->
-          <img :src="logo" alt="Logo" class="logo"/>
+          <img :src="logo" alt="Logo" class="logo" />
           <Motion>
             <h2 class="outline-none">{{ title }}</h2>
           </Motion>

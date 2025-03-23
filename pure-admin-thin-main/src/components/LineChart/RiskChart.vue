@@ -12,7 +12,7 @@ import { LineChart } from "echarts/charts";
 import {
   GridComponent,
   TooltipComponent,
-  LegendComponent,
+  LegendComponent
 } from "echarts/components";
 import { CanvasRenderer } from "echarts/renderers";
 
@@ -22,7 +22,7 @@ use([
   TooltipComponent,
   LegendComponent,
   LineChart,
-  CanvasRenderer,
+  CanvasRenderer
 ]);
 
 // 定义 Props
@@ -37,25 +37,31 @@ const props = defineProps<{
 
 // 计算 ECharts 配置
 const chartOption = computed(() => {
+  // 获取最大值和最小值
+  const values = props.chartData.values || [];
+  const maxValue = Math.max(...values) * 1.1; // 最大值的 1.5 倍
+  const minValue = Math.min(...values) * 0.9; // 最小值的 0.7 倍
   return {
     title: {
       text: "风险信号波动图",
-      left: "center",
+      left: "center"
     },
     tooltip: {
       trigger: "axis",
       formatter: (params: any) => {
         const { name, value } = params[0];
         return `时间: ${name} <br> 值: ${value}`;
-      },
+      }
     },
     xAxis: {
       type: "category",
       data: props.chartData.time || [],
-      boundaryGap: false,
+      boundaryGap: false
     },
     yAxis: {
       type: "value",
+      min: parseFloat(minValue.toFixed(2)),
+      max: parseFloat(maxValue.toFixed(2))
     },
     series: [
       {
@@ -64,10 +70,10 @@ const chartOption = computed(() => {
         data: props.chartData.values || [],
         smooth: true,
         lineStyle: {
-          width: 2,
-        },
-      },
-    ],
+          width: 2
+        }
+      }
+    ]
   };
 });
 </script>

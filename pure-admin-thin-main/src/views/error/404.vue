@@ -128,7 +128,7 @@ const fetchChartData = async () => {
     ElMessage.warning("请选择交易期限");
     return;
   }
-
+  console.log("开始请求 API...");
   try {
     console.log("发送请求参数:", {
       countries: selectedCountries.value,
@@ -138,28 +138,27 @@ const fetchChartData = async () => {
       maxDrawdown: maxDrawdown.value,
       investmentPeriod: selectedPeriod.value
     });
-<<<<<<< HEAD
 
-    const response = await axios.post("http://127.0.0.1:8000/currency_pair", {
-=======
-//http://121.36.9.36:5959/
-    const response = await axios.post("http://127.0.0.1:8000/currency_pair/", {
->>>>>>> f5c044c20c17764cfdfb1cc68852fccd197c8284
-      countries: selectedCountries.value,
-      startDate: dateRange.value[0], //.toISOString().split("T")[0],
-      endDate: dateRange.value[1], //.toISOString().split("T")[0],
-      maxDrawdown: maxDrawdown.value,
-      investmentPeriod: selectedPeriod.value
-    });
-    console.log(response)
+    const response = await axios.post(
+      "http://121.36.9.36:5959/currency_pair/",
+      {
+        countries: selectedCountries.value,
+        startDate: dateRange.value[0], //.toISOString().split("T")[0],
+        endDate: dateRange.value[1], //.toISOString().split("T")[0],
+        maxDrawdown: maxDrawdown.value,
+        investmentPeriod: selectedPeriod.value
+      }
+    );
+    console.log("API 响应:", response.data); // 🚀 确保 API 返回了数据
     // 处理响应数据
     chartData1.value = {
-      time: response.data.date_time,
-      values: response.data.predict_rate
+      time: response.data.data.date_time, // x 轴
+      values: response.data.data.predict_rate.map(Number) // y 轴（转为 number）
     };
+
     chartData2.value = {
-      time: response.data.date_time,
-      values: response.data.true_rate
+      time: response.data.data.date_time, // x 轴
+      values: response.data.data.true_rate.map(Number) // y 轴（转为 number）
     };
   } catch (error) {
     console.error("请求失败:", error);
