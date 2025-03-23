@@ -1,10 +1,10 @@
 <template>
   <div class="calendar-container">
     <input
-      type="date"
       v-model="selectedDate"
-      @change="handleDateChange"
+      type="date"
       class="date-picker"
+      @change="handleDateChange"
     />
   </div>
 </template>
@@ -24,13 +24,11 @@ const handleDateChange = () => {
 
 <style scoped>
 .calendar-container {
-  padding: 10px;
   text-align: center;
-  margin: 10px;
-  width: 150px;
+  width: 50px;
 }
 .date-picker {
-  padding: 10px;
+  padding: 5px;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 16px;

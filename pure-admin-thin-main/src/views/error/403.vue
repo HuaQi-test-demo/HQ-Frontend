@@ -14,8 +14,8 @@ const router = useRouter();
 
 const chartRefLeft = ref<HTMLDivElement | null>(null);
 const chartRefRight = ref<HTMLDivElement | null>(null);
-const maxDrawdown = ref<number>(-0.1); // 最大回撤比例，默认为2%
-const selectedMonth = ref<number>(null); // 单选月份
+const maxDrawdown = ref<number>(-0.1); // 最大回撤比例，默认为-0.1
+const selectedMonth = ref<number>(12); // 单选月份
 const selectedPeriod = ref<number>(1); // 交易期限，默认为1年
 const availableMonths = computed(() => {
   if (selectedPeriod.value === 1) {
@@ -130,12 +130,13 @@ const fetchChartData = async () => {
       "http://121.36.9.36:5959/multi_currency/",
       {
         month: selectedMonth.value, // 🔹 直接传单个值
-        maxDrawdown: maxDrawdown.value
+        maxDrawdown: maxDrawdown.value,
+        investmentPeriod: selectedPeriod.value
       }
     );
     if (response.data.result1 && response.data.result2) {
       console.log(
-        "📊 接收到的 result 数据:",
+        "接收到的 result 数据:",
         response.data.result1,
         response.data.result2
       );
@@ -265,7 +266,7 @@ const updateCharts = (result1: any, result2: any) => {
           <el-option label="5年" :value="5" />
         </el-select>
       </div>
-      <!-- 📌 月份选择框 -->
+      <!--  月份选择框 -->
       <div class="input1">
         <p style="margin-left: 20px">请选择查看的月份：</p>
         <el-select
@@ -307,25 +308,25 @@ const updateCharts = (result1: any, result2: any) => {
 }
 .input1 {
   width: 100%;
-  margin: 10px;
+  margin: 20px;
 }
 .drawdown-input {
-  margin: 20px;
+  margin: 10px;
   width: 100%;
 }
 
 .period-select {
-  margin: 20px;
+  margin: 10px;
   width: 100%;
 }
 
 .select-month {
-  margin: 20px;
+  margin: 10px;
   width: 100%;
 }
 
 .button {
-  margin: 55px;
+  margin: 45px;
   width: 20%;
 }
 

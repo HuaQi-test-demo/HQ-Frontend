@@ -1,14 +1,19 @@
 <!-- eslint-disable vue/no-parsing-error -->
 <!-- eslint-disable prettier/prettier -->
 <template>
-  <div class="container">
-    <div ref="chartRef" class="chart" :style="chartStyle" />
-    <div class="select" :style="selectStyle">
-      <CollapsibleCalendar
-        class="calendar"
-        @dateSelected="handleDateSelected"
+  <div class="dashboard">
+      
+    <!-- 中间列 -->
+    <div class="column2">
+      <el-date-picker
+        v-model="selectedDate"
+        type="date"
+        placeholder="选择日期"
+        :disabled-date="disabledDate"
+        @change="handleDateSelected"
       />
-      <div v-if="showExchangeRate" class="exchange-rate-container">
+      <div ref="chartRef" class="chart" :style="chartStyle"/>
+      <div v-if="showExchangeRate" class="chart-container exchange-rate-container">
         <div class="exchange-rate-details">
           <div class="header">
             <h2>{{ selectedCountry }} - {{ selectedDate }} 汇率详情</h2>
@@ -46,6 +51,10 @@
         </div>
       </div>
     </div>
+    <div class="column1">
+      <div ref="pieChart" class="chart-container"/>
+      <div ref="lineChart" class="chart-container"/>
+    </div>
   </div>
 </template>
 
@@ -61,19 +70,51 @@ import axios from "axios";
 const router = useRouter();
 const chartRef = ref<HTMLDivElement | null>(null);
 const selectedCountries = ref<string[]>([]);
-const selectedDate = ref<string>("");
+const selectedDate = ref<string>("2024-01-01");
 const selectedCountry = ref<string>("");
 const showExchangeRate = ref<boolean>(false);
 const myChart = ref<echarts.ECharts | null>(null); // 保存 ECharts 实例
+// 主要货币数据
+const currencyData = [
+  {
+    name: "EUR",
+    rates: [
+      0.92265, 0.92665, 0.9333, 0.92325, 0.93335, 0.9246, 0.9052, 0.89535,
+      0.92095, 0.94545, 0.96095
+    ]
+  },
+  {
+    name: "JPY",
+    rates: [
+      147.365, 150.655, 151.345, 156.32, 156.985, 160.88, 152.7, 146.18,
+      142.815, 153.245, 149.755, 157
+    ]
+  },
+  {
+    name: "GBP",
+    rates: [
+      0.789827, 0.792111, 0.796242, 0.785577, 0.790826, 0.779029, 0.761789,
+      0.747245, 0.771694, 0.785238, 0.796908
+    ]
+  },
+  {
+    name: "CNY",
+    rates: [
+      7.198, 7.22235, 7.229, 7.23275, 7.26725, 7.241, 7.0913, 7.01105, 7.11615,
+      7.24605, 7.29935
+    ]
+  }
+];
+// 地图样式
+const chartStyle = ref({ width: "100%", height: "500px" }); // 确保这个高度合适
+const pieChart = ref<HTMLDivElement | null>(null);
 
-// 计算样式
-const chartStyle = computed(() => ({
-  width: showExchangeRate.value ? "50%" : "90%"
-}));
-
-const selectStyle = computed(() => ({
-  width: showExchangeRate.value ? "80%" : "20%"
-}));
+// 设定可选范围，比如只允许 2024 年内选择
+const disabledDate = date => {
+  const minDate = new Date("2024-01-01");
+  const maxDate = new Date("2024-12-31");
+  return date < minDate || date > maxDate;
+};
 
 // 监听 showExchangeRate 的变化
 watch(showExchangeRate, () => {
@@ -97,25 +138,23 @@ const sendToBackend = async (datas: {
     console.log(new_data);
   } catch (error) {
     console.error("Error sending data to backend:", error);
+    // 提示用户后端连接失败，但地图应该仍然显示
+    alert("无法连接到后端，地图将加载默认数据。");
   }
 };
 console.log(new_data);
 onMounted(async () => {
-  await nextTick();
-
+  await nextTick(); // 确保 DOM 完成渲染
   if (!chartRef.value) {
     console.error("❌ chartRef 未绑定到 DOM！");
     return;
   }
-
   myChart.value = echarts.init(chartRef.value);
   if (!myChart.value) {
     console.error("❌ ECharts 初始化失败！");
     return;
   }
-
   echarts.registerMap("WorldCountry", geo.WorldCountryGeo);
-
   const options: echarts.EChartsOption = {
     tooltip: { trigger: "item" },
     toolbox: {
@@ -158,12 +197,9 @@ onMounted(async () => {
       }
     ]
   };
-
   myChart.value.setOption(options);
-
   myChart.value.on("click", (params: any) => {
     if (!params.name) return;
-
     const country = params.name;
     if (
       !selectedCountries.value.includes(country) &&
@@ -172,7 +208,6 @@ onMounted(async () => {
       selectedCountries.value.push(country);
       selectedCountry.value = country;
     }
-
     // 如果已经选择了日期，发送国家和日期到后端
     if (selectedDate.value) {
       sendToBackend({
@@ -200,8 +235,59 @@ onMounted(async () => {
       showExchangeRate.value = true;
     }
   });
-
+  console.log(myChart.value.getOption());
   window.addEventListener("resize", () => myChart.value?.resize());
+
+  // 柱状图
+  const lineChart = echarts.init(
+    document.querySelectorAll(".chart-container")[1] as any
+  );
+
+  lineChart.setOption({
+    title: { text: "📈 主要货币汇率趋势", top: 0 },
+    tooltip: { trigger: "axis" },
+    legend: { data: currencyData.map(c => c.name), top: 30 },
+    grid: { top: 60, left: "10%", right: "10%", bottom: "10%" },
+    xAxis: {
+      type: "category",
+      data: Array.from(
+        { length: currencyData[0].rates.length },
+        (_, i) => `Day ${i + 1}`
+      )
+    },
+    yAxis: { type: "value" },
+    series: currencyData.map(currency => ({
+      name: currency.name,
+      type: "line",
+      data: currency.rates
+    }))
+  });
+
+  // 饼图（市场占比）
+  if (!pieChart.value) {
+    console.error("❌ pieChart 未绑定到 DOM！");
+    return;
+  }
+
+  // 绑定 ECharts
+  const pieChartInstance = echarts.init(pieChart.value);
+  pieChartInstance.setOption({
+    title: { text: "🍕 主要货币占比" },
+    tooltip: { trigger: "item" },
+    series: [
+      {
+        type: "pie",
+        data: [
+          { name: "USD", value: 47.89 },
+          { name: "EUR", value: 22.85 },
+          { name: "JPY", value: 3.61 },
+          { name: "GBP", value: 6.84 },
+          { name: "CNY", value: 4.47 },
+          { name: "other", value: 14.34 }
+        ]
+      }
+    ]
+  });
 });
 
 const handleDateSelected = (date: string) => {
@@ -224,22 +310,39 @@ const closeExchangeRate = () => {
 </script>
 
 <style scoped>
-.container {
+.dashboard {
   display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  gap: 5px;
 }
-
-.select {
-  border-left: black 1px solid;
-  background: #f2eee6;
+.column1 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
-
-.chart {
-  height: 100vh;
+.column2 {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(5px, 2%, 30px); /* 动态控制 gap */
+  height: 100%; /* 确保父元素有明确高度 */
+}
+.center {
+  align-items: center;
+}
+.chart-container {
+  flex: 1; /* 让子元素平分父元素高度 */
+  width: 100%;
+  min-height: 0; /* 解决 flex 子元素塌陷问题 */
 }
 
 .calendar {
-  width: 10%;
-  padding: 10px;
+  display: flex;
+  justify-content: flex-start; /* 左对齐 */
+  width: 100%;
+  height: 30px;
 }
 
 .exchange-rate-container {
