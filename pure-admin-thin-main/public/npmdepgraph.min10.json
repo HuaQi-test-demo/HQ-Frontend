@@ -73,21 +73,12 @@
       "size": 23.713282
     },
     {
-      "color": "#4FC3F7",
-      "label": "HKD（港元）",
-      "attributes": {},
-      "y": -449.40155,
-      "x": -173.24167,
-      "id": "HKD（港元）",
-      "size": 20.031315
-    },
-    {
       "color": "#EF9A9A",
-      "label": "SGD（新加坡元）",
+      "label": "ILS（以色列新谢克尔）",
       "attributes": {},
       "y": 120.37976,
       "x": -710.59204,
-      "id": "SGD（新加坡元）",
+      "id": "ILS（以色列新谢克尔）",
       "size": 19.818306
     },
     {
@@ -262,13 +253,7 @@
     },
     {
       "sourceID": "USD（美元）",
-      "targetID": "HKD（港元）",
-      "attributes": {},
-      "size": 1
-    },
-    {
-      "sourceID": "USD（美元）",
-      "targetID": "SGD（新加坡元）",
+      "targetID": "ILS（以色列新谢克尔）",
       "attributes": {},
       "size": 1
     },
@@ -394,13 +379,7 @@
     },
     {
       "sourceID": "EUR（欧元）",
-      "targetID": "HKD（港元）",
-      "attributes": {},
-      "size": 1
-    },
-    {
-      "sourceID": "EUR（欧元）",
-      "targetID": "SGD（新加坡元）",
+      "targetID": "ILS（以色列新谢克尔）",
       "attributes": {},
       "size": 1
     },
@@ -520,13 +499,7 @@
     },
     {
       "sourceID": "JPY（日元）",
-      "targetID": "HKD（港元）",
-      "attributes": {},
-      "size": 1
-    },
-    {
-      "sourceID": "JPY（日元）",
-      "targetID": "SGD（新加坡元）",
+      "targetID": "ILS（以色列新谢克尔）",
       "attributes": {},
       "size": 1
     },
@@ -640,13 +613,7 @@
     },
     {
       "sourceID": "GBP（英镑）",
-      "targetID": "HKD（港元）",
-      "attributes": {},
-      "size": 1
-    },
-    {
-      "sourceID": "GBP（英镑）",
-      "targetID": "SGD（新加坡元）",
+      "targetID": "ILS（以色列新谢克尔）",
       "attributes": {},
       "size": 1
     },
@@ -754,13 +721,7 @@
     },
     {
       "sourceID": "CNY（人民币）",
-      "targetID": "HKD（港元）",
-      "attributes": {},
-      "size": 1
-    },
-    {
-      "sourceID": "CNY（人民币）",
-      "targetID": "SGD（新加坡元）",
+      "targetID": "ILS（以色列新谢克尔）",
       "attributes": {},
       "size": 1
     },
@@ -862,13 +823,7 @@
     },
     {
       "sourceID": "AUD（澳元）",
-      "targetID": "HKD（港元）",
-      "attributes": {},
-      "size": 1
-    },
-    {
-      "sourceID": "AUD（澳元）",
-      "targetID": "SGD（新加坡元）",
+      "targetID": "ILS（以色列新谢克尔）",
       "attributes": {},
       "size": 1
     },
@@ -964,13 +919,7 @@
     },
     {
       "sourceID": "CAD（加元）",
-      "targetID": "HKD（港元）",
-      "attributes": {},
-      "size": 1
-    },
-    {
-      "sourceID": "CAD（加元）",
-      "targetID": "SGD（新加坡元）",
+      "targetID": "ILS（以色列新谢克尔）",
       "attributes": {},
       "size": 1
     },
@@ -1060,13 +1009,7 @@
     },
     {
       "sourceID": "CHF（瑞士法郎）",
-      "targetID": "HKD（港元）",
-      "attributes": {},
-      "size": 1
-    },
-    {
-      "sourceID": "CHF（瑞士法郎）",
-      "targetID": "SGD（新加坡元）",
+      "targetID": "ILS（以色列新谢克尔）",
       "attributes": {},
       "size": 1
     },
@@ -1155,175 +1098,85 @@
       "size": 1
     },
     {
-      "sourceID": "HKD（港元）",
-      "targetID": "SGD（新加坡元）",
-      "attributes": {},
-      "size": 1
-    },
-    {
-      "sourceID": "HKD（港元）",
+      "sourceID": "ILS（以色列新谢克尔）",
       "targetID": "KRW（韩元）",
       "attributes": {},
       "size": 1
     },
     {
-      "sourceID": "HKD（港元）",
+      "sourceID": "ILS（以色列新谢克尔）",
       "targetID": "INR（印度卢比）",
       "attributes": {},
       "size": 1
     },
     {
-      "sourceID": "HKD（港元）",
+      "sourceID": "ILS（以色列新谢克尔）",
       "targetID": "BRL（巴西雷亚尔）",
       "attributes": {},
       "size": 1
     },
     {
-      "sourceID": "HKD（港元）",
+      "sourceID": "ILS（以色列新谢克尔）",
       "targetID": "MXN（墨西哥比索）",
       "attributes": {},
       "size": 1
     },
     {
-      "sourceID": "HKD（港元）",
+      "sourceID": "ILS（以色列新谢克尔）",
       "targetID": "SEK（瑞典克朗）",
       "attributes": {},
       "size": 1
     },
     {
-      "sourceID": "HKD（港元）",
+      "sourceID": "ILS（以色列新谢克尔）",
       "targetID": "NOK（挪威克朗）",
       "attributes": {},
       "size": 1
     },
     {
-      "sourceID": "HKD（港元）",
+      "sourceID": "ILS（以色列新谢克尔）",
       "targetID": "PLN（波兰兹罗提）",
       "attributes": {},
       "size": 1
     },
     {
-      "sourceID": "HKD（港元）",
+      "sourceID": "ILS（以色列新谢克尔）",
       "targetID": "TRY（土耳其里拉）",
       "attributes": {},
       "size": 1
     },
     {
-      "sourceID": "HKD（港元）",
+      "sourceID": "ILS（以色列新谢克尔）",
       "targetID": "AED（阿联酋迪拉姆）",
       "attributes": {},
       "size": 1
     },
     {
-      "sourceID": "HKD（港元）",
+      "sourceID": "ILS（以色列新谢克尔）",
       "targetID": "SAR（沙特里亚尔）",
       "attributes": {},
       "size": 1
     },
     {
-      "sourceID": "HKD（港元）",
+      "sourceID": "ILS（以色列新谢克尔）",
       "targetID": "THB（泰铢）",
       "attributes": {},
       "size": 1
     },
     {
-      "sourceID": "HKD（港元）",
+      "sourceID": "ILS（以色列新谢克尔）",
       "targetID": "IDR（印尼盾）",
       "attributes": {},
       "size": 1
     },
     {
-      "sourceID": "HKD（港元）",
+      "sourceID": "ILS（以色列新谢克尔）",
       "targetID": "ARS（阿根廷比索）",
       "attributes": {},
       "size": 1
     },
     {
-      "sourceID": "HKD（港元）",
-      "targetID": "RUB（俄罗斯卢布）",
-      "attributes": {},
-      "size": 1
-    },
-    {
-      "sourceID": "SGD（新加坡元）",
-      "targetID": "KRW（韩元）",
-      "attributes": {},
-      "size": 1
-    },
-    {
-      "sourceID": "SGD（新加坡元）",
-      "targetID": "INR（印度卢比）",
-      "attributes": {},
-      "size": 1
-    },
-    {
-      "sourceID": "SGD（新加坡元）",
-      "targetID": "BRL（巴西雷亚尔）",
-      "attributes": {},
-      "size": 1
-    },
-    {
-      "sourceID": "SGD（新加坡元）",
-      "targetID": "MXN（墨西哥比索）",
-      "attributes": {},
-      "size": 1
-    },
-    {
-      "sourceID": "SGD（新加坡元）",
-      "targetID": "SEK（瑞典克朗）",
-      "attributes": {},
-      "size": 1
-    },
-    {
-      "sourceID": "SGD（新加坡元）",
-      "targetID": "NOK（挪威克朗）",
-      "attributes": {},
-      "size": 1
-    },
-    {
-      "sourceID": "SGD（新加坡元）",
-      "targetID": "PLN（波兰兹罗提）",
-      "attributes": {},
-      "size": 1
-    },
-    {
-      "sourceID": "SGD（新加坡元）",
-      "targetID": "TRY（土耳其里拉）",
-      "attributes": {},
-      "size": 1
-    },
-    {
-      "sourceID": "SGD（新加坡元）",
-      "targetID": "AED（阿联酋迪拉姆）",
-      "attributes": {},
-      "size": 1
-    },
-    {
-      "sourceID": "SGD（新加坡元）",
-      "targetID": "SAR（沙特里亚尔）",
-      "attributes": {},
-      "size": 1
-    },
-    {
-      "sourceID": "SGD（新加坡元）",
-      "targetID": "THB（泰铢）",
-      "attributes": {},
-      "size": 1
-    },
-    {
-      "sourceID": "SGD（新加坡元）",
-      "targetID": "IDR（印尼盾）",
-      "attributes": {},
-      "size": 1
-    },
-    {
-      "sourceID": "SGD（新加坡元）",
-      "targetID": "ARS（阿根廷比索）",
-      "attributes": {},
-      "size": 1
-    },
-    {
-      "sourceID": "SGD（新加坡元）",
+      "sourceID": "ILS（以色列新谢克尔）",
       "targetID": "RUB（俄罗斯卢布）",
       "attributes": {},
       "size": 1

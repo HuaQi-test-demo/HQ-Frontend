@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, nextTick, watch } from "vue";
+import { ref, onMounted, nextTick, watch, computed } from "vue";
 import axios from "axios";
 import * as echarts from "echarts";
 import $ from "jquery";
@@ -14,9 +14,18 @@ const router = useRouter();
 
 const chartRefLeft = ref<HTMLDivElement | null>(null);
 const chartRefRight = ref<HTMLDivElement | null>(null);
-const maxDrawdown = ref<number>(2); // 最大回撤比例，默认为2%
+const maxDrawdown = ref<number>(-0.1); // 最大回撤比例，默认为2%
 const selectedMonth = ref<number>(null); // 单选月份
-
+const selectedPeriod = ref<number>(1); // 交易期限，默认为1年
+const availableMonths = computed(() => {
+  if (selectedPeriod.value === 1) {
+    return [10, 11, 12];
+  } else if (selectedPeriod.value === 3) {
+    return [5, 6, 7, 8, 9, 10, 11, 12];
+  } else {
+    return Array.from({ length: 12 }, (_, i) => i + 1);
+  }
+});
 // 📌 复用 ECharts 初始化函数
 const initChart = (chartRef: HTMLDivElement | null) => {
   if (!chartRef) {
@@ -93,20 +102,29 @@ onMounted(() => {
     nextTick(fetchChartData);
   });
 });
-
+const validateInput = () => {
+  if (maxDrawdown.value >= 0) {
+    maxDrawdown.value = -Math.abs(maxDrawdown.value);
+  }
+};
 const fetchChartData = async () => {
   if (selectedMonth.value === null) {
     ElMessage.warning("请选择一个月份");
     return;
   }
-  if (maxDrawdown.value === null || maxDrawdown.value <= 0) {
+  if (maxDrawdown.value === null || maxDrawdown.value > 0) {
     ElMessage.warning("请输入有效的最大回撤比例");
+    return;
+  }
+  if (selectedPeriod.value === null) {
+    ElMessage.warning("请选择交易期限");
     return;
   }
   try {
     console.log("发送请求参数:", {
       month: selectedMonth.value, // 🔹 单选
-      maxDrawdown: maxDrawdown.value
+      maxDrawdown: maxDrawdown.value,
+      investmentPeriod: selectedPeriod.value
     });
     const response = await axios.post(
       "http://121.36.9.36:5959/multi_currency/",
@@ -146,43 +164,71 @@ const updateCharts = (result1: any, result2: any) => {
     return;
   }
 
-  const formatGraphData = (data: any) => ({
-    animationDurationUpdate: 1000,
-    animationEasingUpdate: "elasticOut" as any,
-    series: [
-      {
-        type: "graph",
-        layout: "force",
-        roam: true,
-        force: {
-          repulsion: 1,
-          gravity: 0.02,
-          edgeLength: [50, 2000]
-        },
-        boundingRect: [-500, -500, 1000, 1000],
-        data: data.nodes.map((node: any) => ({
-          x: node.x,
-          y: node.y,
-          id: node.id,
-          name: node.label,
-          symbolSize: node.size,
-          draggable: true,
-          itemStyle: { color: node.color },
-          label: { show: true }
-        })),
-        edges: data.edges.map((edge: any) => ({
-          source: edge.sourceID,
-          target: edge.targetID
-        })),
-        emphasis: {
-          scale: 1.2,
-          focus: "adjacency",
-          roam: false,
-          lineStyle: { width: 0.5, curveness: 0.3, opacity: 0.7 }
+  const formatGraphData = (data: any) => {
+    // 获取所有节点连接的边的 size
+    const validEdges = data.edges;
+    const validNodeIds = new Set(
+      validEdges.flatMap((edge: any) => [edge.sourceID, edge.targetID])
+    );
+
+    return {
+      animationDurationUpdate: 1000,
+      animationEasingUpdate: "elasticOut" as any,
+      series: [
+        {
+          type: "graph",
+          layout: "force",
+          roam: true,
+          force: {
+            repulsion: 1,
+            gravity: 0.02,
+            edgeLength: [50, 2000]
+          },
+          boundingRect: [-500, -500, 1000, 1000],
+          // 过滤掉没有有效连接的节点
+          data: data.nodes
+            .filter((node: any) => validNodeIds.has(node.id))
+            .map((node: any) => ({
+              x: node.x,
+              y: node.y,
+              id: node.id,
+              name: node.label,
+              symbolSize: node.size,
+              draggable: true,
+              itemStyle: { color: node.color },
+              label: { show: true }
+            })),
+          // 只保留 size 不为 0 的边
+          edges: validEdges.map((edge: any) => {
+            let color = "#CFD8DC"; // 默认颜色
+            if (edge.size >= 1.3) {
+              color = "#F44336";
+            } else if (edge.size >= 1.1) {
+              color = "#EF9A9A";
+            } else if (edge.size >= 0.9) {
+              color = "#CFD8DC";
+            } else if (edge.size >= 0.7) {
+              color = "#81D4FA";
+            } else {
+              color = "#03A9F4";
+            }
+
+            return {
+              source: edge.sourceID,
+              target: edge.targetID,
+              lineStyle: { color }
+            };
+          }),
+          emphasis: {
+            scale: 1.2,
+            focus: "adjacency",
+            roam: false,
+            lineStyle: { width: 0.5, curveness: 0.3, opacity: 0.7 }
+          }
         }
-      }
-    ]
-  });
+      ]
+    };
+  };
 
   // 更新左侧图表
   leftChart.setOption(formatGraphData(result1));
@@ -195,26 +241,46 @@ const updateCharts = (result1: any, result2: any) => {
 <template>
   <div class="max">
     <div class="up">
-      <el-input
-        v-model.number="maxDrawdown"
-        type="number"
-        placeholder="请输入最大回撤比例"
-        class="drawdown-input"
-      />
-      <!-- 📌 月份选择框 -->
-      <el-select
-        v-model="selectedMonth"
-        placeholder="请选择月份"
-        class="select-month"
-      >
-        <el-option
-          v-for="month in 12"
-          :key="month"
-          :label="`${month} 月`"
-          :value="`2024-${month.toString().padStart(2, '0')}-01`"
+      <div class="input1">
+        <p style="margin-left: 20px">请输入最大回撤比例：</p>
+        <el-input
+          v-model.number="maxDrawdown"
+          type="number"
+          placeholder="请输入最大回撤比例"
+          class="drawdown-input"
+          :min="-100"
+          :step="0.01"
+          @change="validateInput"
         />
-      </el-select>
-
+      </div>
+      <div class="input1">
+        <p style="margin-left: 20px">请选择交易期限：</p>
+        <el-select
+          v-model="selectedPeriod"
+          placeholder="选择交易期限"
+          class="period-select"
+        >
+          <el-option label="1年" :value="1" />
+          <el-option label="3年" :value="3" />
+          <el-option label="5年" :value="5" />
+        </el-select>
+      </div>
+      <!-- 📌 月份选择框 -->
+      <div class="input1">
+        <p style="margin-left: 20px">请选择查看的月份：</p>
+        <el-select
+          v-model="selectedMonth"
+          placeholder="请选择月份"
+          class="select-month"
+        >
+          <el-option
+            v-for="month in availableMonths"
+            :key="month"
+            :label="`${month} 月`"
+            :value="`2024-${month.toString().padStart(2, '0')}-01`"
+          />
+        </el-select>
+      </div>
       <el-button class="button" @click="fetchChartData">更新数据</el-button>
     </div>
     <div class="container">
@@ -235,21 +301,34 @@ const updateCharts = (result1: any, result2: any) => {
 .max {
   display: block;
 }
+
 .up {
   display: flex;
+}
+.input1 {
+  width: 100%;
+  margin: 10px;
 }
 .drawdown-input {
   margin: 20px;
   width: 100%;
 }
+
+.period-select {
+  margin: 20px;
+  width: 100%;
+}
+
 .select-month {
   margin: 20px;
   width: 100%;
 }
+
 .button {
-  margin: 20px;
+  margin: 55px;
   width: 20%;
 }
+
 .container {
   display: flex;
   height: 75vh;
